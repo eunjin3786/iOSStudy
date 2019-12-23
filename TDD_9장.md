@@ -194,22 +194,22 @@ class MockDogPatchService: DogPatchService {
 
 <details>
 <summary>  6.1 ListingsViewController의 networkClient 변수를 프로토콜 타입으로 & refreshData에 로직넣어주기 </summary>
+    
+<ListingsViewControllerTests.swift>  
 
 ```swift
-<ListingsViewControllerTests.swift>
+// sut은 ListingsViewController
+func test_refreshData_setsRequest() {
+    // given
+    let mockNetworkClient = MockDogPatchService()
+    sut.networkClient = mockNetworkClient
 
-    // sut은 ListingsViewController
-    func test_refreshData_setsRequest() {
-        // given
-        let mockNetworkClient = MockDogPatchService()
-        sut.networkClient = mockNetworkClient
+    // when
+    sut.refreshData()
 
-        // when
-        sut.refreshData()
-
-        // then
-        XCTAssertEqual(sut.dataTask, mockNetworkClient.getDogsDataTask)
-      }
+    // then
+    XCTAssertEqual(sut.dataTask, mockNetworkClient.getDogsDataTask)
+  }
 ```
 위의 테스트함수로 ListingsViewContoller가 바뀌었다.   
 
@@ -273,7 +273,8 @@ func test_refreshData_ifAlreadyRefreshing_doesntCallAgain() {
 
 
 <details>
-<summary> 6.3 테스트 코드를 리팩토링하기 </summary>
+<summary> 6.3 테스트 코드를 리팩토링하기 </summary> 
+    
 ```swift
  var mockNetworkClient: MockDogPatchService!
 
@@ -352,7 +353,8 @@ func test_refreshData_completionNilsDataTask() {
 <details>
 <summary> 6.5 refreshData에서 API Call이 성공하면 뷰모델이 업데이트 되는 지 확인하기 </summary>
 
-👉 여기서 뷰모델은 화면당 하나가 아니라 테이블뷰 셀 당 하나임  
+👉 여기서 뷰모델은 화면당 하나가 아니라 테이블뷰 셀 당 하나임 
+
 👉 뷰모델은 Equatable을 따르고 있어서 "같은 dog을 가지고 있는 뷰모델은 같다" 라고 비교된다. 
 
 ```swift 
@@ -411,14 +413,14 @@ func test_refreshData_givenDogsResponse_setsViewModels() {
     guard dataTask == nil else { return }
     dataTask = networkClient.getDogs(completion: { (dogs, error) in
       self.dataTask = nil
-      self.viewModels = dogs?.map { DogViewModel(dog: $0) } ?? []
+      ✅ self.viewModels = dogs?.map { DogViewModel(dog: $0) } ?? []
     })
   }
 ```
 </details>
 
 <details>
-<summary> 6.6 refreshData에서 API Call이 성공하고 뷰모델이 업데이트 된 후, tableview reloadData가 호출되는 지 확인하기 </summary>  
+<summary> 6.6 refreshData에서 API Call이 성공하고 뷰모델이 업데이트 된 후, tableview reloadData가 호출되는 지 확인하기 </summary>
 
 ```swift
 // sut은 ListingsViewController
@@ -450,7 +452,9 @@ func test_refreshData_givenDogsResponse_reloadsTableView() {
     XCTAssertTrue(mockTableView.calledReloadData)
   }
 ```
+
 이 테스트의 통과를 위해 ✅이 추가됨. 
+
 ```swift 
 @objc func refreshData() {
     // TODO: - Write this
@@ -458,14 +462,15 @@ func test_refreshData_givenDogsResponse_reloadsTableView() {
     dataTask = networkClient.getDogs(completion: { (dogs, error) in
       self.dataTask = nil
       self.viewModels = dogs?.map { DogViewModel(dog: $0) } ?? []
-      self.tableView.reloadData()
+      ✅ self.tableView.reloadData()
     })
   }
 ```
 </details>
 
 <details>
-<summary>  6.7 refreshData할때 refreshControl이 잘 동작하는 지 확인하기 </summary> 
+<summary>  6.7 refreshData할때 refreshControl이 잘 동작하는 지 확인하기 </summary>
+  
 ```swift
 func test_refreshData_beginsRefreshing() {
     // given
@@ -479,7 +484,7 @@ func test_refreshData_beginsRefreshing() {
  }
 ```
 
-​```swift
+```swift
 func test_refreshData_givenDogsResponse_endsRefreshing() {
   // given
   givenMockNetworkClient()
@@ -494,7 +499,7 @@ func test_refreshData_givenDogsResponse_endsRefreshing() {
 }
 ```
 
-두 테스트를 거치며 이렇게 바뀌었음.스트를 거치며 이렇게 바뀌었음.
+두 테스트를 거치며 이렇게 바뀌었음.
 
 ```swift
 @objc func refreshData() {
