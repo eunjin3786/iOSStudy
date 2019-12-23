@@ -518,7 +518,7 @@ func test_refreshData_givenDogsResponse_endsRefreshing() {
 
 ```swift
 import XCTest
-import OHHTTPStubort OHHTTPStub`ort OHHTTPStubort OHHTTPStub`s
+import OHHTTPStub
 
 @testable import Tistory
 
