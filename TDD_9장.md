@@ -316,7 +316,7 @@ func test_refreshData_ifAlreadyRefreshing_doesntCallAgain() {
 <details>
 <summary> 6.4 getDogs 에 관한 completion이 불리면 dataTask가 nil로 다시 set 되도록하기 </summary>
 
-​```swift
+```swift
 func test_refreshData_completionNilsDataTask() {
     // given
     // 1
@@ -353,7 +353,8 @@ func test_refreshData_completionNilsDataTask() {
 <summary> 6.5 refreshData에서 API Call이 성공하면 뷰모델이 업데이트 되는 지 확인하기 </summary>
 
 👉 여기서 뷰모델은 화면당 하나가 아니라 테이블뷰 셀 당 하나임  
-👉 뷰모델은 Equatable을 따르고 있어서 "같은 dog을 가지고 있는 뷰모델은 같다" 라고 비교된다.   
+👉 뷰모델은 Equatable을 따르고 있어서 "같은 dog을 가지고 있는 뷰모델은 같다" 라고 비교된다. 
+
 ```swift 
 // DogViewModel은 이렇게 Equatable을 구현해서 저렇게 비교하면 같다고 나옴. 
 // MARK: - Equatable
@@ -364,6 +365,7 @@ extension DogViewModel: Equatable {
 }
 ```
 👉 ListingsViewControllerTests 안의 givenDogs함수. 
+
 ```swift
 func givenDogs(count: Int = 3) -> [Dog] {
     return (1 ... count).map { i in
@@ -416,7 +418,7 @@ func test_refreshData_givenDogsResponse_setsViewModels() {
 </details>
 
 <details>
-<summary> 6.6 refreshData에서 API Call이 성공하고 뷰모델이 업데이트 된 후, tableview reloadData가 호출되는 지 확인하기 </summary>
+<summary> 6.6 refreshData에서 API Call이 성공하고 뷰모델이 업데이트 된 후, tableview reloadData가 호출되는 지 확인하기 </summary>  
 
 ```swift
 // sut은 ListingsViewController
